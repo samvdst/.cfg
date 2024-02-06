@@ -115,6 +115,8 @@ export FZF_CTRL_T_COMMAND='rg --files --no-messages'
 eval "$(zoxide init zsh)"
 eval "$(fnm env --use-on-cd)"
 
+export PATH="/home/sam/.local/bin:$PATH"
+
 # exa
 if [[ -x "$(command -v exa)" ]] then
   alias ll='exa -l --icons --group-directories-first'
