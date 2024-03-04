@@ -80,3 +80,6 @@ esac
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# nvim
+export PATH="$PATH:/opt/nvim-linux64/bin"
