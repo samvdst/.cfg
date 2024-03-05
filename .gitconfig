@@ -1,0 +1,22 @@
+[credential "https://github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[user]
+	email = sam@vd.st
+	name = Samuel Van der Stappen
+[core]
+  pager = delta
+  editor = nvim
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+  navigate = true
+[merge]
+  conflictstyle = diff3
+[diff]
+  colorMoved = default
+[init]
+	defaultBranch = main
+[push]
+	autoSetupRemote = true
