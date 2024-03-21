@@ -1,43 +1,55 @@
+exec dbus-sway-environment
+exec configure-gtk
+set $menu bemenu-run
+output DP-1 scale 1.5
+
+input * {
+  repeat_rate 90
+  repeat_delay 350
+}
+
 set $mod Mod4
 
 font pango:GeistMono Nerd Font 10
 
 # autostart
-exec --no-startup-id dex --autostart --environment i3
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-exec --no-startup-id nm-applet
-exec --no-startup-id ~/AppImages/kDrive-3.5.7.20240124-amd64.AppImage
+# exec --no-startup-id dex --autostart --environment i3
+# exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+# exec --no-startup-id nm-applet
+# exec --no-startup-id ~/AppImages/kDrive-3.5.7.20240124-amd64.AppImage
 
-exec --no-startup-id xrandr --output DP-0 --mode 5120x2160 --pos 0x0 --rotate normal
-exec_always --no-startup-id feh --bg-scale ~/Pictures/wallpaper.jpg
+# exec --no-startup-id xrandr --output DP-0 --mode 5120x2160 --pos 0x0 --rotate normal
+# exec_always --no-startup-id feh --bg-scale ~/Pictures/wallpaper.jpg
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
-bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
-bindsym XF86AudioNext exec --no-startup-id playerctl next
-bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
 
 # screenshot to file
-bindsym Print exec --no-startup-id maim --format=png "$HOME/Pictures/Screenshots/$(date -u +'%Y-%m-%d %H%M%S') screenshot-full.png"
-bindsym $mod+Print exec --no-startup-id maim --format=png --window $(xdotool getactivewindow) "$HOME/Pictures/Screenshots/$(date -u +'%Y-%m-%d %H%M%S') screenshot-window.png"
-bindsym Shift+Print exec --no-startup-id maim --format=png --select "$HOME/Pictures/Screenshots/$(date -u +'%Y-%m-%d %H%M%S') screenshot-selection.png"
+#bindsym Print exec --no-startup-id maim --format=png "$HOME/Pictures/Screenshots/$(date -u +'%Y-%m-%d %H%M%S') screenshot-full.png"
+bindsym Print exec grim -g "$(slurp)" "$HOME/Pictures/Screenshots/$(date -u +'%Y-%m-%d %H%M%S') screenshot-full.png"
+# bindsym $mod+Print exec --no-startup-id maim --format=png --window $(xdotool getactivewindow) "$HOME/Pictures/Screenshots/$(date -u +'%Y-%m-%d %H%M%S') screenshot-window.png"
+# bindsym Shift+Print exec --no-startup-id maim --format=png --select "$HOME/Pictures/Screenshots/$(date -u +'%Y-%m-%d %H%M%S') screenshot-selection.png"
 # screenshot to clipboard
-bindsym Ctrl+Print exec --no-startup-id maim --format=png | xclip -selection clipboard -t image/png
-bindsym Ctrl+$mod+Print exec --no-startup-id maim --format=png --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
-bindsym Ctrl+Shift+Print exec --no-startup-id maim --format=png --select | xclip -selection clipboard -t image/png
+# bindsym Ctrl+Print exec --no-startup-id maim --format=png | xclip -selection clipboard -t image/png
+# bindsym Ctrl+$mod+Print exec --no-startup-id maim --format=png --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
+# bindsym Ctrl+Shift+Print exec --no-startup-id maim --format=png --select | xclip -selection clipboard -t image/png
 
-bindsym $mod+u exec setxkbmap us
-bindsym $mod+i exec setxkbmap ch
+# bindsym $mod+u exec setxkbmap us
+# bindsym $mod+i exec setxkbmap ch
 
 floating_modifier $mod
-tiling_drag modifier titlebar
+# tiling_drag modifier titlebar
 
 bindsym $mod+Return exec alacritty
 bindsym $mod+t exec thunar
 bindsym $mod+Shift+q kill
-bindsym $mod+d exec --no-startup-id dmenu_run
+bindsym $mod+d exec dmenu_run
+# bindsym $mod+d exec bemenu-run
 
 # select window
 bindsym $mod+h focus left
@@ -93,7 +105,7 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec "sway exit"
 mode "resize" {
         bindsym h resize shrink width 5 px or 5 ppt
         bindsym j resize grow height 5 px or 5 ppt
@@ -109,22 +121,26 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-bar {
-  status_command i3blocks -c ~/.config/i3/i3blocks.conf
-  colors {
-    background $bg-color
-    separator #757575
-    focused_workspace $bg-color $bg-color $text-color
-    inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-    urgent_workspace $urgent-bg-color $urgent-bg-color $text-color
-  }
-}
-
 set $bg-color #2f343f
 set $inactive-bg-color #2f343f
 set $text-color #f3f4f5
 set $inactive-text-color #676e7d
 set $urgent-bg-color #e53935
+
+bar {
+  position bottom
+  status_command i3status-rs ~/.config/i3/i3status-rs.toml
+  # status_command i3blocks -c ~/.config/i3/i3blocks.conf
+  # status_command i3status
+  # colors {
+  #   background $bg-color
+  #   separator #757575
+  #   focused_workspace $bg-color $bg-color $text-color
+  #   inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+  #   urgent_workspace $urgent-bg-color $urgent-bg-color $text-color
+  # }
+}
+
 # windows colors            border                background            text                    indicator
 client.focused              $bg-color             $bg-color             $text-color             #00ff00
 client.unfocused            $inactive-bg-color    $inactive-bg-color    $inactive-text-color    #00ff00
